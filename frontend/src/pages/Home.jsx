@@ -3,8 +3,9 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import introVideo from "../assets/videos/intro.mp4";
 import demoVideo from "../assets/videos/demo.mp4";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const  Home = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [faqOpen, setFaqOpen] = useState(null);
 
@@ -28,18 +29,22 @@ const Home = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow py-8 px-16">
         {/* Welcome and Video Section in parallel */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Welcome Box */}
-          <div className="text-center bg-blue-100 p-8 rounded-lg shadow-md h-[400px] flex flex-col justify-center">
+          <div className="text-center bg-[#CCE5E5] outline outline-[#008080] p-8 rounded-lg shadow-md h-[83vh] flex flex-col justify-center">
             <h1 className="text-3xl font-bold mb-6">Welcome to PyWhiz</h1>
             <p className="mt-4 text-lg">If you are between age 11 - 15, this is the right platform for learning Python.</p>
-            <button className="mt-8 px-6 py-3 bg-teal-500 text-white rounded-lg text-lg hover:bg-teal-600">Get Started</button>
+            <Link to="/learn">
+              <button className="mt-8 px-6 py-3 bg-[#28BEBE] text-black outline outline-[#003366] rounded-lg text-lg hover:bg-[#CCE5E5]">
+                Get Started
+              </button>
+            </Link>
           </div>
 
           {/* First Video Player */}
-          <div className="relative cursor-pointer h-[400px]" onClick={() => setSelectedVideo(introVideo)}>
+          <div className="relative cursor-pointer h-[83vh] outline outline-[#008080] rounded-lg shadow-md" onClick={() => setSelectedVideo(introVideo)}>
             <video 
               src={introVideo}
               className="w-full h-full object-cover rounded-lg shadow-lg" 
@@ -51,29 +56,30 @@ const Home = () => {
         </div>
 
         {/* Image Section */}
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 ">
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`Image ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
+            <img key={index} 
+                src={image} 
+                alt={`Image ${index + 1}`} 
+                className="w-full md:h-[46vh] object-cover outline outline-[#008080] rounded-lg shadow-md" />
           ))}
         </div>
 
         {/* Second Video Section (Demo) */}
         <div className="mt-8 text-center">
-          <video controls className="w-full max-w-3xl mx-auto rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold mb-4">Watch Demo</h2>
+          <video controls className="w-[85%] mx-auto outline outline-[#008080] rounded-lg shadow-md">
             <source src={demoVideo} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <button className="mt-4 px-6 py-3 bg-teal-500 text-white rounded-lg text-lg hover:bg-teal-600">
-            Watch Demo
-          </button>
         </div>
         
         {/* FAQ Section */}
         <div className="mt-8">
           <h2 className="text-xl font-bold text-center">Frequently Asked Questions</h2>
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 space-y-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-blue-200 p-4 rounded-lg cursor-pointer" onClick={() => setFaqOpen(faqOpen === index ? null : index)}>
+              <div key={index} className="bg-[#CCE5E5] outline outline-[#008080] p-4 rounded-lg cursor-pointer" onClick={() => setFaqOpen(faqOpen === index ? null : index)}>
                 <h3 className="font-semibold">{faq.question}</h3>
                 {faqOpen === index && <p className="mt-2">{faq.answer}</p>}
               </div>

@@ -1,77 +1,105 @@
+"use client";
+
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import logo from '../assets/logo.jpg'
-import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import image from "../assets/login.png";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = () => {
-    navigate('/signup');
+    navigate("/signup");
+  };
+
+  const handleForgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-blue-100">
-      <div className="bg-white w-full max-w-6xl h-screen flex flex-col md:flex-row">
-        {/* Left Side - Image */}
-        <div className="md:w-1/2 h-screen">
-          <img 
-            src="src/assets/login-image.png" 
-            alt="Login Illustration" 
-            className="w-full h-full object-cover"
-          />
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 p-4">
+      <div className="flex w-full max-w-6xl flex-col overflow-hidden rounded-3x backdrop-blur-sm md:flex-row place-item-center">
+        {/* Left side - Image */}
+        <div className="relative w-full md:w-2/3">
+          <div className="relative h-full min-h-[300px] grow-2 overflow-hidden rounded-3xl md:min-h-[500px]">
+            <img
+              src={image}
+              alt="Python Programming"
+              className="object-cover"
+            />
+          </div>
         </div>
 
-        {/* Right Side - Login Form */}
-        <div className="md:w-1/2 flex items-center justify-center p-8">
-          <div className="w-full max-w-md">
-            <div className="flex flex-col items-center mb-6">
-              <img 
-                src={logo} 
-                alt="Logo" 
-                className="w-20 h-20 object-contain mb-2"
-              />
-              <h2 className="text-2xl font-bold text-gray-800">Student Registration</h2>
-            </div>
-            <form className="mt-4 space-y-4">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none"
-              />
-              {/* Password Field */}
+        {/* Right side - Login Form */}
+        <div className="flex w-full flex-col justify-center p-8 md:w-1/2 bg-white h-[60vh]">
+          <div className="mx-auto w-full max-w-md">
+            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800">
+              Login
+            </h1>
+
+            <div className="mb-6 space-y-6">
+              {/* Email Input */}
               <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-3 text-gray-500"
-                  onClick={() => setShowPassword(!showPassword)}
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-xl font-medium text-gray-700"
                 >
-                  {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
-                </button>
+                  Email
+                </label>
+                <div className="relative mt-1">
+                  <input
+                    type="email"
+                    id="email"
+                    className="w-full border-b-2 border-gray-300 bg-transparent py-2 pl-2 pr-10 text-gray-700 focus:border-blue-500 focus:outline-none"
+                    placeholder="Enter your email"
+                  />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                    <Mail className="h-5 w-5 text-gray-500" />
+                  </div>
+                </div>
               </div>
 
-              {/* Forgot Password */}
-              <p className="text-center text-gray-700">I do not remember my password</p>
+              {/* Password Input */}
+              <div className="relative">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-xl font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <div className="relative mt-1">
+                  <input
+                    type="password"
+                    id="password"
+                    className="w-full border-b-2 border-gray-300 bg-transparent py-2 pl-2 pr-10 text-gray-700 focus:border-blue-500 focus:outline-none"
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </div>
+            </div>
 
-              {/* Buttons */}
-              <button className="w-full bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600">
-                Login
-              </button>
-              <p className="text-center font-semibold">Create New Account</p>
-              <button
-                type="button"
-                onClick={handleSignup}
-                className="w-full bg-yellow-500 text-black py-2 rounded-lg font-semibold hover:bg-yellow-600"
-              >
-                Sign Up
-              </button>
-            </form>
+            {/* Login Button */}
+            <button
+              type="submit"
+              className="mt-8 w-full rounded-full bg-blue-900 py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Login
+            </button>
+
+            {/* Links */}
+            <div className="mt-6 flex justify-between text-sm">
+              <a href="#" className="text-gray-600 hover:text-blue-500">
+                Create an account
+              </a>
+              <a href="#" className="text-gray-600 hover:text-blue-500">
+                Forgot password?
+              </a>
+            </div>
           </div>
         </div>
       </div>

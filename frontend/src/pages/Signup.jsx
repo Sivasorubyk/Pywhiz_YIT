@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import logo from '../assets/logo.jpg'
+import logo from '../assets/logo.png'
 import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {

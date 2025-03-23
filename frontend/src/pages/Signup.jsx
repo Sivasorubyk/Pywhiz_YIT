@@ -35,9 +35,9 @@ const Signup = () => {
         </div>
 
         {/* Left side - Signup Form */}
-        <div className="flex w-full md:w-1/2 bg-white/30 h-[60vh] items-center justify-center p-6 mt-[15vh] rounded-l-2xl">
+        <div className="flex w-full md:w-1/2 bg-white/30 h-[70vh] items-center justify-center p-6 mt-[10vh] rounded-l-2xl">
           <div className="mx-auto w-full max-w-md">
-            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-[sora]">
+            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-inknut">
               Sign Up
             </h1>
 
@@ -99,11 +99,7 @@ const Signup = () => {
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? (
-                    <Lock className="h-5 w-5 text-black" />
-                  ) : (
-                    <Lock className="h-5 w-5 text-black" />
-                  )}
+                  <Lock className="h-5 w-5 text-black" />
                 </div>
               </div>
             </div>
@@ -111,7 +107,7 @@ const Signup = () => {
             {/* Signup Button with Custom Font */}
             <button
               type="submit"
-              className="mt-8 w-full rounded-full bg-[#004D40] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-[dm-sans]"
+              className="mt-8 w-full rounded-full bg-[#004D40] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
             >
               Sign Up
             </button>

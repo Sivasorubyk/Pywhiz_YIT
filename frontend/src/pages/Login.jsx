@@ -37,7 +37,7 @@ const Login = () => {
         {/* Right side - Login Form */}
         <div className="flex w-full md:w-1/2 bg-white/30 h-[60vh] items-center justify-center p-6 mt-[15vh] rounded-r-2xl">
           <div className="mx-auto w-full max-w-md">
-            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-[sora]">
+            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-inknut">
               Login
             </h1>
 
@@ -80,11 +80,7 @@ const Login = () => {
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-black" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-black" />
-                  )}
+                  <Lock className="h-5 w-5 text-black" />
                 </div>
               </div>
             </div>
@@ -92,7 +88,7 @@ const Login = () => {
             {/* Login Button with Custom Font */}
             <button
               type="submit"
-              className="mt-8 w-full rounded-full bg-[#002244] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-[dm-sans]"
+              className="mt-8 w-full rounded-full bg-[#002244] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
             >
               Login
             </button>

@@ -35,7 +35,7 @@ const ForgotPassword = () => {
         {/* Left side - Forgot Password Form */}
         <div className="flex w-full md:w-1/2 bg-white/30 h-[70vh] items-center justify-center p-6 mt-[10vh] rounded-l-2xl">
           <div className="mx-auto w-full max-w-md">
-            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-[sora]">
+            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-inknut">
               Forgot Password
             </h1>
 
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
               {/* Send OTP Button */}
               <button
                 onClick={handleSendOtp}
-                className="w-full rounded-full bg-[#004D80] py-3 text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
+                className="w-full font-inknut rounded-full bg-[#004D80] py-3 text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
               >
                 Send OTP
               </button>
@@ -115,7 +115,7 @@ const ForgotPassword = () => {
             {/* Login Button */}
             <button
               onClick={handleLogin}
-              className="mt-8 w-full rounded-full bg-[#004D80] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
+              className="mt-8 w-full font-inknut rounded-full bg-[#004D80] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
             >
               Login
             </button>

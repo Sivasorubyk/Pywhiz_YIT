@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Mail, Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/signup.png";
 import "@fontsource/inknut-antiqua";
@@ -24,20 +24,18 @@ const Signup = () => {
     <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-[#D0F0FF] to-[#004D40] p-4">
       <div className="flex w-full max-w-6xl flex-col overflow-hidden rounded-3xl backdrop-blur-sm md:flex-row-reverse">
         {/* Right side - Image */}
-        <div className="relative w-full md:w-2/3">
-          <div className="relative h-full min-h-[300px] grow-2 overflow-hidden rounded-3xl md:min-h-[10vh]">
-            <img
-              src={image}
-              alt="Python Programming"
-              className="object-cover w-full h-full"
-            />
-          </div>
+        <div className="relative w-full hidden md:block md:w-1/2">
+          <img
+            src={image}
+            alt="Python Programming"
+            className="w-full h-full object-cover rounded-r-3xl"
+          />
         </div>
 
         {/* Left side - Signup Form */}
-        <div className="flex w-full md:w-1/2 bg-white/30 h-[70vh] items-center justify-center p-6 mt-[10vh] rounded-l-2xl">
-          <div className="mx-auto w-full max-w-md">
-            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-inknut">
+        <div className="flex w-full md:w-1/2 bg-white/30 items-center justify-center p-6 md:rounded-l-2xl">
+          <div className="w-full max-w-md">
+            <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold text-gray-800 font-inknut">
               Sign Up
             </h1>
 
@@ -104,19 +102,19 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* Signup Button with Custom Font */}
+            {/* Signup Button */}
             <button
               type="submit"
-              className="mt-8 w-full rounded-full bg-[#004D40] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
+              className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
             >
               Sign Up
             </button>
 
             {/* Links */}
-            <div className="mt-6 flex justify-between text-sm">
+            <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
               <a
                 href="#"
-                className="text-[#004D40] hover:text-black"
+                className="text-[#004D40] hover:text-black mb-2 md:mb-0"
                 onClick={handleLogin}
               >
                 Already have an account?

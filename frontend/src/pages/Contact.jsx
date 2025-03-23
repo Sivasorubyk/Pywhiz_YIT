@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +13,13 @@ const Contact = () => {
   const faqs = [
     {
       question: "What is this website about?",
-      answer: "We provide interactive Python learning experiences for children.",
+      answer:
+        "We provide interactive Python learning experiences for children.",
     },
     {
       question: "How do I contact support?",
-      answer: "You can contact us by filling out the form on the right side of this page.",
+      answer:
+        "You can contact us by filling out the form on the right side of this page.",
     },
     {
       question: "Can I access the content for free?",
@@ -48,7 +49,9 @@ const Contact = () => {
           {/* Left Section: Q&A */}
           <div className="w-1/2 pr-4">
             <div className="mt-8">
-              <h2 className="text-xl font-bold text-center">Frequently Asked Questions</h2>
+              <h2 className="text-xl font-bold text-center">
+                Frequently Asked Questions
+              </h2>
               <div className="mt-4 space-y-6">
                 {faqs.map((faq, index) => (
                   <div

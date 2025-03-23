@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, KeyRound } from "lucide-react"; // Added KeyRound icon
+import { Mail, Lock, KeyRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/signup.png";
 import "@fontsource/inknut-antiqua";
@@ -18,24 +18,26 @@ const ForgotPassword = () => {
     navigate("/login");
   };
 
+  const handleSignup = () => {
+    navigate("/signup");
+  };
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-[#D0F0FF] to-[#A3DAFF] p-4">
       <div className="flex w-full max-w-6xl flex-col overflow-hidden rounded-3xl backdrop-blur-sm md:flex-row-reverse">
         {/* Right side - Image */}
-        <div className="relative w-full md:w-2/3">
-          <div className="relative h-full min-h-[300px] grow-2 overflow-hidden rounded-3xl md:min-h-[10vh]">
-            <img
-              src={image}
-              alt="Password Reset"
-              className="object-cover w-full h-full"
-            />
-          </div>
+        <div className="relative w-full hidden md:block md:w-1/2">
+          <img
+            src={image}
+            alt="Python Programming"
+            className="w-full h-full object-cover rounded-r-3xl"
+          />
         </div>
 
         {/* Left side - Forgot Password Form */}
-        <div className="flex w-full md:w-1/2 bg-white/30 h-[70vh] items-center justify-center p-6 mt-[10vh] rounded-l-2xl">
-          <div className="mx-auto w-full max-w-md">
-            <h1 className="mb-8 text-center text-4xl font-bold text-gray-800 font-inknut">
+        <div className="flex w-full md:w-1/2 bg-white/30 items-center justify-center p-6 md:rounded-l-2xl">
+          <div className="w-full max-w-md">
+            <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold text-gray-800 font-inknut">
               Forgot Password
             </h1>
 
@@ -64,7 +66,7 @@ const ForgotPassword = () => {
               {/* Send OTP Button */}
               <button
                 onClick={handleSendOtp}
-                className="w-full font-inknut rounded-full bg-[#004D80] py-3 text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
+                className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
               >
                 Send OTP
               </button>
@@ -115,10 +117,28 @@ const ForgotPassword = () => {
             {/* Login Button */}
             <button
               onClick={handleLogin}
-              className="mt-8 w-full font-inknut rounded-full bg-[#004D80] py-3 text-center text-xl font-semibold text-white shadow-lg hover:bg-black focus:outline-none"
+              className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
             >
-              Login
+              Login with New Password
             </button>
+
+            {/* Links */}
+            <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
+              <a
+                href="#"
+                className="text-[#004D40] hover:text-black mb-2 md:mb-0"
+                onClick={handleLogin}
+              >
+                Remember the password?
+              </a>
+              <a
+                href="#"
+                className="text-[#004D40] hover:text-black"
+                onClick={handleSignup}
+              >
+                Sign Up
+              </a>
+            </div>
           </div>
         </div>
       </div>

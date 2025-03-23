@@ -24,7 +24,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-[#D0F0FF] to-[#A3DAFF] p-4">
-      <div className="flex w-full max-w-6xl flex-col overflow-hidden rounded-3xl backdrop-blur-sm md:flex-row-reverse">
+      <div className="flex w-full max-w-6xl flex-col md:flex-row-reverse overflow-hidden rounded-3xl backdrop-blur-sm">
         {/* Right side - Image */}
         <div className="relative w-full hidden md:block md:w-1/2">
           <img
@@ -35,9 +35,9 @@ const ForgotPassword = () => {
         </div>
 
         {/* Left side - Forgot Password Form */}
-        <div className="flex w-full md:w-1/2 bg-white/30 items-center justify-center p-6 md:rounded-l-2xl">
-          <div className="w-full max-w-md">
-            <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold text-gray-800 font-inknut">
+        <div className="flex w-full md:w-1/2 bg-white/30 items-center justify-center p-6 md:rounded-l-2xl flex-col md:flex-row">
+          <div className="w-full max-w-md text-center">
+            <h1 className="mb-6 text-3xl md:text-4xl font-bold text-gray-800 font-inknut">
               Forgot Password
             </h1>
 

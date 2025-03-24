@@ -1,55 +1,71 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = "http://localhost:8000/api";
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
+// Register user
 export const register = async (userData) => {
   try {
-    const response = await api.post('/register', userData);
+    const response = await api.post("/register", userData);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    handleError(error, "registration");
   }
 };
 
+// Login user
 export const login = async (credentials) => {
   try {
-    const response = await api.post('/login', credentials);
+    const response = await api.post("/login", credentials);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    handleError(error, "login");
   }
 };
 
+// Logout user
 export const logout = async () => {
   try {
-    const response = await api.post('/logout');
+    const response = await api.post("/logout");
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    handleError(error, "logout");
   }
 };
 
+// Forgot password
 export const forgotPassword = async (email) => {
   try {
-    const response = await api.post('/forgot-password', { email });
+    const response = await api.post("/forgot-password", { email });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    handleError(error, "forgot password request");
   }
 };
 
+// Verify OTP
 export const verifyOTP = async (data) => {
   try {
-    const response = await api.post('/verify-otp', data);
+    const response = await api.post("/verify-otp", data);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    handleError(error, "OTP verification");
+  }
+};
+
+// Generic error handling function
+const handleError = (error, action) => {
+  if (error.response) {
+    throw new Error(
+      error.response.data.message || `An error occurred during ${action}`
+    );
+  } else {
+    throw new Error(`Network error during ${action}`);
   }
 };

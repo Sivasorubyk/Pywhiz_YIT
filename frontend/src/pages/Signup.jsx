@@ -8,11 +8,11 @@ import "@fontsource/inknut-antiqua";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
+    name: "",
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -37,10 +37,10 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(formData);
-      navigate("/login");
+      await register(formData); // Send signup data to API
+      navigate("/login"); // Redirect to login page on successful signup
     } catch (err) {
-      setError(err.message || 'Registration failed');
+      setError(err.message || "Registration failed"); // Display error message if registration fails
     }
   };
 
@@ -51,7 +51,7 @@ const Signup = () => {
         <div className="relative w-full hidden md:block md:w-1/2">
           <img
             src={image}
-            alt="Python Programming"
+            alt="Signup Illustration"
             className="w-full h-full object-cover rounded-r-3xl"
           />
         </div>
@@ -63,14 +63,16 @@ const Signup = () => {
               Sign Up
             </h1>
 
+            {/* Error Message */}
             {error && (
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                 {error}
               </div>
             )}
 
+            {/* Signup Form */}
             <form onSubmit={handleSubmit} className="mb-6 space-y-6">
-              {/* name Input */}
+              {/* Name Input */}
               <div className="relative">
                 <input
                   type="text"

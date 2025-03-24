@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Lock, KeyRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { forgotPassword, verifyOTP } from "../services/api"; // Import the API functions
 import image from "../assets/signup.png";
 import "@fontsource/inknut-antiqua";
 
@@ -9,9 +10,26 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSendOtp = () => {
-    console.log("OTP sent to:", email);
+  const handleSendOtp = async () => {
+    try {
+      await forgotPassword(email);
+      setMessage("OTP has been sent to your email");
+    } catch (err) {
+      setError(err.message || "Failed to send OTP");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      await verifyOTP({ email, otp, new_password: newPassword });
+      setMessage("Password reset successful");
+      navigate("/login");
+    } catch (err) {
+      setError(err.message || "Failed to verify OTP");
+    }
   };
 
   const handleLogin = () => {
@@ -40,6 +58,17 @@ const ForgotPassword = () => {
             <h1 className="mb-6 text-3xl md:text-4xl font-bold text-gray-800 font-inknut">
               Forgot Password
             </h1>
+
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+            {message && (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {message}
+              </div>
+            )}
 
             <div className="mb-6 space-y-6">
               {/* Email Input */}
@@ -114,12 +143,12 @@ const ForgotPassword = () => {
               </div>
             </div>
 
-            {/* Login Button */}
+            {/* Reset Password Button */}
             <button
-              onClick={handleLogin}
+              onClick={handleResetPassword}
               className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
             >
-              Login with New Password
+              Reset Password
             </button>
 
             {/* Links */}

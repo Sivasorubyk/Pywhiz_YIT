@@ -2,11 +2,19 @@ import { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/login.png";
+import { login } from "../services/api"; // Import the login function
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
 import "@fontsource/inknut-antiqua";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth(); // Get login function from context
 
   const handleSignup = () => {
     navigate("/signup");
@@ -18,6 +26,24 @@ const Login = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await login(formData);
+      authLogin(response.user, response.jwt); // Call login from context
+      navigate("/"); // Redirect to dashboard or home
+    } catch (err) {
+      setError(err.message || 'Login failed');
+    }
   };
 
   return (
@@ -39,14 +65,23 @@ const Login = () => {
               Login
             </h1>
 
-            <div className="mb-6 space-y-6">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="mb-6 space-y-6">
               {/* Email Input */}
               <div className="relative">
                 <input
                   type="email"
                   id="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="peer w-full border-b-2 border-black bg-transparent py-2 pl-2 pr-10 text-black focus:outline-none placeholder-transparent"
                   placeholder="Enter your email"
+                  required
                 />
                 <label
                   htmlFor="email"
@@ -64,8 +99,11 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className="peer w-full border-b-2 border-black bg-transparent py-2 pl-2 pr-10 text-black focus:outline-none placeholder-transparent"
                   placeholder="Enter your password"
+                  required
                 />
                 <label
                   htmlFor="password"
@@ -80,33 +118,33 @@ const Login = () => {
                   <Lock className="h-5 w-5 text-black" />
                 </div>
               </div>
-            </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              className="mt-6 w-full rounded-full bg-[#002244] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
-            >
-              Login
-            </button>
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="mt-6 w-full rounded-full bg-[#002244] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
+              >
+                Login
+              </button>
 
-            {/* Links */}
-            <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
-              <a
-                href="#"
-                className="text-[#002244] hover:text-black mb-2 md:mb-0"
-                onClick={handleSignup}
-              >
-                Create an account
-              </a>
-              <a
-                href="#"
-                className="text-[#002244] hover:text-black"
-                onClick={handleForgotPassword}
-              >
-                Forgot password?
-              </a>
-            </div>
+              {/* Links */}
+              <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
+                <a
+                  href="#"
+                  className="text-[#002244] hover:text-black mb-2 md:mb-0"
+                  onClick={handleSignup}
+                >
+                  Create an account
+                </a>
+                <a
+                  href="#"
+                  className="text-[#002244] hover:text-black"
+                  onClick={handleForgotPassword}
+                >
+                  Forgot password?
+                </a>
+              </div>
+            </form>
           </div>
         </div>
       </div>

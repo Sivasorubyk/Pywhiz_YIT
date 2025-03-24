@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fontsource/inknut-antiqua": "^5.2.5",
+    "@heroicons/react": "^2.2.0",
+    "axios": "^1.8.4",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

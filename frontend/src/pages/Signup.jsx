@@ -2,10 +2,17 @@ import { useState } from "react";
 import { Mail, Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import image from "../assets/signup.png";
+import { register } from "../services/api";
 import "@fontsource/inknut-antiqua";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -18,6 +25,23 @@ const Signup = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await register(formData);
+      navigate("/login");
+    } catch (err) {
+      setError(err.message || 'Registration failed');
+    }
   };
 
   return (
@@ -39,20 +63,29 @@ const Signup = () => {
               Sign Up
             </h1>
 
-            <div className="mb-6 space-y-6">
-              {/* Username Input */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="mb-6 space-y-6">
+              {/* name Input */}
               <div className="relative">
                 <input
                   type="text"
-                  id="username"
+                  id="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="peer w-full border-b-2 border-[#000000] bg-transparent py-2 pl-2 pr-10 text-black focus:outline-none placeholder-transparent"
-                  placeholder="Enter your username"
+                  placeholder="Enter your Name"
+                  required
                 />
                 <label
-                  htmlFor="username"
+                  htmlFor="name"
                   className="absolute left-2 -top-3 text-sm text-[#000000] transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-black"
                 >
-                  Username
+                  Name
                 </label>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                   <User className="h-5 w-5 text-black" />
@@ -64,8 +97,11 @@ const Signup = () => {
                 <input
                   type="email"
                   id="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="peer w-full border-b-2 border-[#000000] bg-transparent py-2 pl-2 pr-10 text-black focus:outline-none placeholder-transparent"
                   placeholder="Enter your email"
+                  required
                 />
                 <label
                   htmlFor="email"
@@ -83,8 +119,11 @@ const Signup = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className="peer w-full border-b-2 border-black bg-transparent py-2 pl-2 pr-10 text-black focus:outline-none placeholder-transparent"
                   placeholder="Enter your password"
+                  required
                 />
                 <label
                   htmlFor="password"
@@ -100,33 +139,33 @@ const Signup = () => {
                   <Lock className="h-5 w-5 text-black" />
                 </div>
               </div>
-            </div>
 
-            {/* Signup Button */}
-            <button
-              type="submit"
-              className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
-            >
-              Sign Up
-            </button>
+              {/* Signup Button */}
+              <button
+                type="submit"
+                className="mt-6 w-full rounded-full bg-[#004D40] py-3 text-center text-lg font-semibold text-white shadow-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-inknut"
+              >
+                Sign Up
+              </button>
 
-            {/* Links */}
-            <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
-              <a
-                href="#"
-                className="text-[#004D40] hover:text-black mb-2 md:mb-0"
-                onClick={handleLogin}
-              >
-                Already have an account?
-              </a>
-              <a
-                href="#"
-                className="text-[#004D40] hover:text-black"
-                onClick={handleForgotPassword}
-              >
-                Forgot password?
-              </a>
-            </div>
+              {/* Links */}
+              <div className="mt-4 flex flex-col md:flex-row md:justify-between text-sm text-center md:text-left">
+                <a
+                  href="#"
+                  className="text-[#004D40] hover:text-black mb-2 md:mb-0"
+                  onClick={handleLogin}
+                >
+                  Already have an account?
+                </a>
+                <a
+                  href="#"
+                  className="text-[#004D40] hover:text-black"
+                  onClick={handleForgotPassword}
+                >
+                  Forgot password?
+                </a>
+              </div>
+            </form>
           </div>
         </div>
       </div>

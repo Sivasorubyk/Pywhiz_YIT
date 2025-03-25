@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext"; // Import the AuthContext
+import { logout } from "../services/api"; // Import the logout function
 
 const Navbar = () => {
-  const { user, logout } = useAuth(); // Access the user from AuthContext
+  const { user, logout: authLogout } = useAuth(); // Access the user and logout from AuthContext
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); // State for dropdown visibility
   const dropdownRef = useRef(null);
@@ -24,10 +25,18 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    setShowDropdown(false); // Close dropdown on logout
+  const handleLogout = async () => {
+    try {
+      await logout(); // Call the logout API
+      authLogout(); // Call logout from context to update state
+      setShowDropdown(false); // Close dropdown on logout
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+
+  console.log("User object:", user); // Debugging line
+
   return (
     <nav className="bg-[#003366] sticky top-0 left-0 right-0 z-50 shadow-lg">
       {/* Navbar Container */}
@@ -90,12 +99,9 @@ const Navbar = () => {
                 >
                   <ul className="text-black">
                     <li>
-                      <Link
-                        to="/edit-profile"
-                        className="block px-4 py-2 text-sm text-black bg-[#28BEBE] hover:bg-[#CCE5E5] w-full text-left rounded-t-md transition-all"
-                      >
-                        Edit Profile
-                      </Link>
+                      <span className="block px-4 py-2 text-sm text-black bg-[#28BEBE] w-full text-left rounded-t-md transition-all">
+                         Hi, {user.name} {/* Display user's name */}
+                      </span>
                     </li>
                     <li>
                       <button

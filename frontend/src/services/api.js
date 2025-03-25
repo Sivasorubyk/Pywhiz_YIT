@@ -59,6 +59,21 @@ export const verifyOTP = async (data) => {
   }
 };
 
+// Fetch user data
+export const fetchUser = async () => {
+  const token = localStorage.getItem("token"); // Get the token from local storage
+  try {
+    const response = await api.get("/user", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the headers
+      },
+    });
+    return response.data; // This should return the user data
+  } catch (error) {
+    handleError(error, "fetching user data");
+  }
+};
+
 // Generic error handling function
 const handleError = (error, action) => {
   if (error.response) {

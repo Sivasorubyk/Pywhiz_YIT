@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Learn from "./pages/Learn";
+import Code from "./pages/Code";
+import Exercise from "./pages/Exercise";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Contact from "./pages/Contact"
@@ -26,6 +28,22 @@ function App() {
             element={
               <PrivateRoute>
                 <Learn />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/code"
+            element={
+              <PrivateRoute>
+                <Code />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/exercise"
+            element={
+              <PrivateRoute>
+                <Exercise />
               </PrivateRoute>
             }
           />

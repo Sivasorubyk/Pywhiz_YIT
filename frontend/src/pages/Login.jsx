@@ -77,12 +77,12 @@ const Login = () => {
                   placeholder="Enter your email"
                   required
                 />
-                <label
+                {/* <label
                   htmlFor="email"
                   className="absolute left-2 -top-3 text-sm text-black transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#002244] peer-focus:text-[#002244]"
                 >
                   Email
-                </label>
+                </label> */}
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                   <Mail className="h-5 w-5 text-black" />
                 </div>
@@ -98,12 +98,12 @@ const Login = () => {
                   placeholder="Enter your password"
                   required
                 />
-                <label
+                {/* <label
                   htmlFor="password"
                   className="absolute left-2 -top-3 text-sm text-black transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#002244] peer-focus:text-[#002244]"
                 >
                   Password
-                </label>
+                </label> */}
                 <div
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                   onClick={togglePasswordVisibility}

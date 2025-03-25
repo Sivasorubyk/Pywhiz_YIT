@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { fetchUser } from "../services/api"; // Import the fetchUser function
 
 const AuthContext = createContext(null);
 
@@ -18,11 +19,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  const login = (userData, token) => {
-    setUser(userData); // Set the user data (including username)
+  const login = async (userData, token) => {
+    setUser(userData); // userData should include the user's name
     setToken(token);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData)); // Store the user data in localStorage
+
+    // Fetch user data from the API
+    const fetchedUser = await fetchUser();
+    setUser(fetchedUser); // Update user state with fetched user data
   };
 
   const logout = () => {

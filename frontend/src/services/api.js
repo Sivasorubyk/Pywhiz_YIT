@@ -74,6 +74,16 @@ export const fetchUser = async () => {
   }
 };
 
+// Run code
+export const runCode = async (code) => {
+  try {
+    const response = await api.post("/practice/run-code/", { code });
+    return response.data; // Return the output from the API
+  } catch (error) {
+    handleError(error, "running code");
+  }
+};
+
 // Generic error handling function
 const handleError = (error, action) => {
   if (error.response) {

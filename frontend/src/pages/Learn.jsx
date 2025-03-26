@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -15,24 +15,26 @@ const LearnPage = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
 
+  // Check local storage on component mount
+  useEffect(() => {
+    const watched = localStorage.getItem("videoWatched") === "true";
+    setVideoWatched(watched);
+    setNextEnabled(watched); // Enable next button if video was watched
+  }, []);
+
   const handleVideoEnd = () => {
     setVideoWatched(true);
-    checkNextEnabled();
+    setNextEnabled(true); // Enable the Next button immediately after video ends
+    localStorage.setItem("videoWatched", "true"); // Store in local storage
   };
 
   const handleAudioEnd = () => {
     setAudioPlayed(true);
-    checkNextEnabled();
-  };
-
-  const checkNextEnabled = () => {
-    if (videoWatched && audioPlayed) {
-      setNextEnabled(true);
-    }
+    // No need to check for enabling the Next button here
   };
 
   const handleNext = () => {
-    navigate("/code");
+    navigate("/code"); // Navigate to the Code page
   };
 
   return (

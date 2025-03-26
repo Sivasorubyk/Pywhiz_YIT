@@ -1,34 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import speakingGif from "../assets/speaking.gif"; // Replace with actual GIF
 import audioFile from "../assets/audio.mp3"; // Ensure this path is correct
-import axios from "axios";
+import { runCode } from "../services/api"; // Import the runCode function
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Code = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [isCodeExecuted, setIsCodeExecuted] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  // Check local storage on component mount
+  useEffect(() => {
+    const executed = localStorage.getItem("codeExecuted") === "true";
+    setIsCodeExecuted(executed); // Enable Next button if code was executed
+  }, []);
 
   const handleRunCode = async () => {
     try {
-      const response = await axios.post("https://api.openai.com/v1/completions", {
-        model: "gemini", // Change to gemini
-        prompt: `Execute this Python code and return output:\n${code}`,
-        max_tokens: 100,
-      }, {
-        headers: {
-          Authorization: `AIzaSyA-KyzFiuOeQImTTkY9wRKZ8opEr9QFfZw`, // Ensure your API key is valid
-          "Content-Type": "application/json",
-        },
-      });
-
-      setOutput(response.data.choices[0].text.trim());
-      setIsCodeExecuted(true);
+      const response = await runCode(code); // Call the runCode function from api.js
+      setOutput(response); // Set the output from the response
+      setIsCodeExecuted(true); // Set the code execution state to true
+      localStorage.setItem("codeExecuted", "true"); // Store in local storage
     } catch (error) {
       console.error("Error executing code:", error);
       setOutput("Error executing the code");
     }
+  };
+
+  const handleNext = () => {
+    navigate("/exercise"); // Navigate to the Exercise page
   };
 
   return (
@@ -79,6 +82,7 @@ const Code = () => {
           <button
             className={`px-4 py-2 rounded-lg ${isCodeExecuted ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
             disabled={!isCodeExecuted}
+            onClick={handleNext}
           >
             Next
           </button>

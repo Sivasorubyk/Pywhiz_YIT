@@ -12,6 +12,7 @@ const Exercise = () => {
   const [userAnswers, setUserAnswers] = useState(["", "", ""]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [nextEnabled, setNextEnabled] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const handleAnswerChange = (index, value) => {
     let newAnswers = [...userAnswers];
@@ -24,8 +25,13 @@ const Exercise = () => {
       setIsCompleted(true);
       setNextEnabled(true);
       confetti();
+      setFeedbackMessage("All answers are correct! 🎉");
     } else {
-      alert("Incorrect answers! Try again.");
+      const incorrectAnswers = userAnswers.map((answer, index) => {
+        return answer !== correctAnswers[index] ? `Question ${index + 1}` : null;
+      }).filter(Boolean);
+
+      setFeedbackMessage(`Incorrect answers in: ${incorrectAnswers.join(", ")}`);
     }
   };
 
@@ -33,7 +39,7 @@ const Exercise = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-blue-100 to-blue-200">
       <Navbar />
       <div className="container mx-auto text-center py-10">
-        <h1 className="text-2xl font-bold">It's time to start test your understanding, We are in Milestone 1!</h1>
+        <h1 className="text-2xl font-bold">It's time to test your understanding, We are in Milestone 1!</h1>
         <div className="bg-white p-5 mt-5 rounded-lg shadow-lg flex">
           <p className="flex-1 text-left">
             {/* Instruction text here */}
@@ -43,7 +49,7 @@ const Exercise = () => {
         </div>
 
         <audio controls className="mt-5">
-        <source src={audioFile} type="audio/mpeg" />
+          <source src={audioFile} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
 
@@ -66,6 +72,10 @@ const Exercise = () => {
 
         <button onClick={checkAnswers} className="bg-blue-500 text-white px-5 py-2 rounded mt-5">Check</button>
         
+        {feedbackMessage && (
+          <p className="text-red-600 font-bold mt-3">{feedbackMessage}</p>
+        )}
+
         {isCompleted && (
           <p className="text-green-600 font-bold mt-3">Milestone 1 Completed! 🎉 Congratulations!</p>
         )}

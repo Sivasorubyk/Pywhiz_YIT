@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'users'
+    'users',
+    'practice_code'
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,6 @@ LOGGING = {
         'level': 'DEBUG',
     },
 }
+
+# Add this line to read the API key from an environment variable
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyDho8IE3z7vwAbFWQpjrAD2KjkWDULvwm8')

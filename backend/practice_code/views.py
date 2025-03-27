@@ -16,3 +16,4 @@ class RunCodeView(APIView):
             return Response({'is_print': is_print, 'suggestion': suggestion[2:]}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': f"Error generating suggestion from Gemini: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

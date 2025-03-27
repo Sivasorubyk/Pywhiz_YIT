@@ -165,11 +165,17 @@ const LearnPage = () => {
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={() => navigate("/learn")}
+              className="p-4 rounded-lg text-lg bg-[#28BEBE] text-black outline outline-[#003366] hover:bg-[#CCE5E5]"
+            >
+              Previous
+            </button>
             <button
               className={`px-6 py-3 rounded-lg text-lg ${
                 isPrint
-                  ? "bg-[#73B9EE] text-black outline outline-[#73B9EE] hover:bg-[#CAE9F5]"
+                  ? "bg-[#73B9EE] text-black outline outline-[#003366] hover:bg-[#CAE9F5]"
                   : "bg-[#28BEBE] text-black outline outline-[#003366] hover:bg-[#CCE5E5]"
               }`}
               onClick={isPrint ? handleNextClick : handleRunCode}

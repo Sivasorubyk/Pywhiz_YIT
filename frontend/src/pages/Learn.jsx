@@ -5,11 +5,12 @@ import Footer from "../components/Footer";
 import demoVideo from "../assets/videos/demo.mp4";
 import speakingGif from "../assets/speaking.gif";
 import audioFile from "../assets/audio.mp3";
-import { VolumeX, Volume2 } from "lucide-react"; // Importing mute/unmute icons
+import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 
 const LearnPage = () => {
   const [videoWatched, setVideoWatched] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // Button starts in Unmute (🔊) state
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
   const navigate = useNavigate();
@@ -19,40 +20,37 @@ const LearnPage = () => {
     setVideoWatched(watched);
   }, []);
 
-  // When video starts, stop the audio and set Unmute (🔊) state
   const handleVideoPlay = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.currentTime = 0; // Reset audio
+      setAudioPlaying(false);
     }
-    setIsMuted(true); // Button should be in Unmute state
+    setIsMuted(true);
   };
 
-  // When video ends, play audio and set Mute (🔇) state
   const handleVideoEnd = () => {
     setVideoWatched(true);
     localStorage.setItem("videoWatched", "true");
-
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.play();
+      setAudioPlaying(true);
     }
-    setIsMuted(false); // Button should be in Mute state
+    setIsMuted(false);
   };
 
-  // Toggle between Muted (🔇) & Unmute (🔊) modes
   const toggleMute = () => {
     if (isMuted) {
-      if (videoRef.current) {
-        videoRef.current.pause(); // Stop video when audio plays
-      }
+      videoRef.current.pause();
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play();
+        setAudioPlaying(true);
       }
     } else {
       if (audioRef.current) {
         audioRef.current.pause();
+        setAudioPlaying(false);
       }
     }
     setIsMuted(!isMuted);
@@ -63,82 +61,68 @@ const LearnPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen flex flex-col">
       <Navbar />
-      <div className="max-w-3xl mx-auto p-8">
-        <h1 className="text-4xl font-extrabold text-center text-gray-800">
-          PyWhiz Classroom
-        </h1>
-        <p className="text-lg text-center text-gray-600 mt-2">
-          Let's start our lessons! Milestone 1
-        </p>
-
-        {/* Video Section */}
-        <div className="mt-6 flex justify-center">
-          <div className="relative w-full max-w-2xl rounded-xl overflow-hidden shadow-lg">
-            <video
-              ref={videoRef}
-              className="w-full rounded-lg"
-              controls
-              onPlay={handleVideoPlay}
-              onEnded={handleVideoEnd}
-            >
-              <source src={demoVideo} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
+      <div className="flex flex-1">
+        {/* Video Section (Left Half) */}
+        <div className="w-1/2 flex justify-center items-center bg-transparent pt-6 pl-6">
+          <video
+            ref={videoRef}
+            className="w-full h-full outline outline-[#008080] rounded-lg"
+            controls
+            onPlay={handleVideoPlay}
+            onEnded={handleVideoEnd}
+          >
+            <source src={demoVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
 
-        {/* Transcript */}
-        <div className="mt-6 p-6 bg-white rounded-lg shadow-md border border-gray-200">
-          <p className="text-gray-700 text-lg font-medium">
-            வீடியோ லீட் எப்படி வேலை செய்கிறது என்பது பற்றிய விளக்கம் இங்கே...
-          </p>
-        </div>
-
-        {/* Speaking Animation with Always Visible Mute Button */}
-        <div className="mt-6 flex items-center bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200 relative">
-          <div className="flex-1">
-            <p className="text-gray-700 text-lg font-medium">
-              அது எப்படி வேலை செய்கிறது. வீடியோ லீட்டின் பின்னணி உள்ள...
+        {/* Right Half */}
+        <div className="w-1/2 flex flex-col p-6 bg-transparent">
+          {/* Intro Section (Top Half) */}
+          <div className="flex-1 p-6 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold">Intro</h2>
+            <p className="text-lg mt-2">
+              In this lesson, we will explore the basics of Python, one of the
+              most popular programming languages. You'll learn about variables,
+              data types, and simple operations. By the end of this lesson,
+              you'll be able to write your first Python program and understand
+              how it runs.
             </p>
           </div>
-          <div className="relative">
+
+          {/* GIF, Transcript & Controls (Bottom Half) */}
+          <div className="flex-1 flex items-center justify-between mt-4 p-6 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
             <img
               src={speakingGif}
               alt="Speaking animation"
-              className="w-24 h-24 ml-4"
+              className="w-24 h-24"
             />
-            {/* Mute/Unmute Button (Always Visible) */}
+            <p className="text-lg pl-6">
+              An exercise will follow after you press the next button to test
+              your knowledge.
+            </p>
             <button
               onClick={toggleMute}
-              className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full shadow-md hover:bg-gray-900"
+              className="text-2xl p-3 bg-white rounded-full shadow-md"
             >
-              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
             </button>
+            {videoWatched && (
+              <button
+                className="ml-4 px-6 py-3 bg-[#28BEBE] text-black outline outline-[#003366] rounded-lg text-lg hover:bg-[#CCE5E5]"
+                onClick={handleNext}
+              >
+                Next
+              </button>
+            )}
           </div>
-        </div>
-
-        {/* Hidden Audio Player */}
-        <audio ref={audioRef} src={audioFile} hidden />
-
-        {/* Next Button */}
-        <div className="mt-8 text-center">
-          <button
-            className={`px-6 py-3 text-lg font-semibold rounded-lg transition-all shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
-            ${
-              videoWatched
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-400 text-gray-200 cursor-not-allowed"
-            }`}
-            onClick={videoWatched ? handleNext : null}
-            disabled={!videoWatched}
-          >
-            Next →
-          </button>
         </div>
       </div>
       <Footer />
+      {/* Hidden Audio Player */}
+      <audio ref={audioRef} src={audioFile} />
     </div>
   );
 };

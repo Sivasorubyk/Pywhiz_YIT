@@ -1,38 +1,18 @@
-from django.shortcuts import render
-import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.conf import settings
 import google.generativeai as genai
-import re  # Import regular expressions for pattern matching
-
-# Create your views here.
+from django.conf import settings
 
 class RunCodeView(APIView):
     def post(self, request):
         code = request.data.get('code', '')
-
-        # Define the expected pattern (e.g., printing a specific name)
-        expected_pattern = r'print\("PyWhiz"\)'  # Change "Your Name" to the expected name
-
-        # Validate the user's code
-        if not re.search(expected_pattern, code):
-            return Response({'error': 'Code does not match the expected pattern.'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            # Initialize Gemini API with the API key from settings
-            genai.configure(api_key=settings.GEMINI_API_KEY)  # Use the environment variable
-            model = genai.GenerativeModel('gemini-1.5-flash')  # Use the base gemini model
-
-            # Prepare the prompt
-            prompt = f'Execute this Python code and return output:\n{code}'
-
-            # Generate the response
-            response = model.generate_content(prompt)
-            output = response.text.strip()
-
-            return Response(output, status=status.HTTP_200_OK)
-
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+            prompt = f'Is the following Python code 100% a print statement? Answer with T or F, then give 2 sentences of suggestions or improvements.\n{code}\n'
+            response = genai.GenerativeModel('gemini-1.5-flash').generate_content(prompt)
+            suggestion = response.text
+            is_print = suggestion[0] == 'T'
+            return Response({'is_print': is_print, 'suggestion': suggestion[2:]}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f"Error generating suggestion from Gemini: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

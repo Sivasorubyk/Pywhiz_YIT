@@ -1,96 +1,193 @@
-import React, { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import speakingGif from "../assets/speaking.gif"; // Replace with actual GIF
-import audioFile from "../assets/audio.mp3"; // Ensure this path is correct
-import { runCode } from "../services/api"; // Import the runCode function
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import speakingGif from "../assets/speaking.gif";
+import audioFile from "../assets/audio.mp3";
+import { FaVolumeMute, FaVolumeUp, FaPlay } from "react-icons/fa";
+import { runCode } from "../services/api";
 
-const Code = () => {
+const LearnPage = () => {
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  const [requiresInteraction, setRequiresInteraction] = useState(true);
+  const audioRef = useRef(null);
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
-  const [isCodeExecuted, setIsCodeExecuted] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [hints, setHints] = useState("Hints will appear here.");
+  const [isPrint, setIsPrint] = useState(false);
+  const navigate = useNavigate();
 
-  // Check local storage on component mount
   useEffect(() => {
-    const executed = localStorage.getItem("codeExecuted") === "true";
-    setIsCodeExecuted(executed); // Enable Next button if code was executed
+    // Check localStorage for previous interaction
+    const hasInteracted = localStorage.getItem("audioInteraction");
+    if (hasInteracted === "true") {
+      setRequiresInteraction(false);
+      // Auto-play after 2 seconds if previously allowed
+      const timer = setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current
+            .play()
+            .then(() => {
+              setAudioPlaying(true);
+              setAudioReady(true);
+            })
+            .catch((error) => {
+              console.error("Auto-play failed:", error);
+              setRequiresInteraction(true);
+            });
+        }
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
-  const handleRunCode = async () => {
-    try {
-      const response = await runCode(code); // Call the runCode function from api.js
-      setOutput(response); // Set the output from the response
-      setIsCodeExecuted(true); // Set the code execution state to true
-      localStorage.setItem("codeExecuted", "true"); // Store in local storage
-    } catch (error) {
-      console.error("Error executing code:", error);
-      setOutput("Error executing the code");
+  const handleFirstPlay = () => {
+    if (audioRef.current) {
+      audioRef.current
+        .play()
+        .then(() => {
+          setAudioPlaying(true);
+          setAudioReady(true);
+          setRequiresInteraction(false);
+          localStorage.setItem("audioInteraction", "true");
+        })
+        .catch((error) => {
+          console.error("Play failed:", error);
+        });
     }
   };
 
-  const handleNext = () => {
-    navigate("/exercise"); // Navigate to the Exercise page
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        // Unmute and play
+        audioRef.current
+          .play()
+          .then(() => {
+            setAudioPlaying(true);
+            setIsMuted(false);
+          })
+          .catch((error) => console.error("Audio play failed:", error));
+      } else {
+        // Mute and pause
+        audioRef.current.pause();
+        setAudioPlaying(false);
+        setIsMuted(true);
+      }
+    }
+  };
+
+  const handleAudioEnd = () => {
+    setAudioPlaying(false);
+    setIsMuted(true);
+  };
+
+  const handleRunCode = async () => {
+    try {
+      const response = await runCode(code);
+      if (response.suggestion) {
+        setOutput(response.suggestion);
+        setHints(response.suggestion);
+        setIsPrint(response.is_print);
+      } else {
+        setOutput("No suggestions available.");
+        setHints("No hints available.");
+        setIsPrint(false);
+      }
+    } catch (error) {
+      console.error("Error executing code:", error);
+      setOutput("Error executing the code");
+      setHints("Error during execution");
+      setIsPrint(false);
+    }
+  };
+
+  const handleNextClick = () => {
+    navigate("/exercise");
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-b from-blue-100 to-white">
+    <div className="h-screen flex flex-col">
       <Navbar />
-      <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-2xl font-bold text-center mb-4">It's time to start coding, We are in milestone 1!</h1>
-        
-        <div className="flex items-center gap-4 p-4 bg-blue-100 rounded-lg shadow-md">
-          <p className="text-lg">
-            Follow the instructions and write your first Python program in the editor below.
-          </p>
-          <img src={speakingGif} alt="Speaking Animation" className="w-24 h-24" />
+      <div className="flex flex-1">
+        {/* Left Half */}
+        <div className="w-1/2 flex flex-col p-6 bg-transparent">
+          {/* Intro Section (Top Half) */}
+          <div className="flex-1 p-6 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold">Intro</h2>
+            <p className="text-lg mt-2">
+              In this lesson, we will explore the basics of Python, one of the
+              most popular programming languages. You'll learn about variables,
+              data types, and simple operations. By the end of this lesson,
+              you'll be able to write your first Python program and understand
+              how it runs.
+            </p>
+            <div className="flex items-center mt-4">
+              <img
+                src={speakingGif}
+                alt="Speaking animation"
+                className="w-24 h-24"
+              />
+              {!audioReady ? (
+                <button
+                  onClick={handleFirstPlay}
+                  className="text-2xl p-3 bg-white rounded-full shadow-md ml-4"
+                  aria-label="Play audio"
+                >
+                  <FaPlay />
+                </button>
+              ) : (
+                <button
+                  onClick={toggleMute}
+                  className="text-2xl p-3 bg-white rounded-full shadow-md ml-4"
+                  aria-label={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Hints Section (Bottom Half) */}
+          <div className="flex-1 p-6 mt-4 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold">Hints</h2>
+            <p className="text-lg mt-2">{hints}</p>
+          </div>
         </div>
-        
-        <div className="mt-4 flex items-center">
-          <audio controls className="w-full my-4">
-            <source src={audioFile} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg">
+
+        {/* Right Half: Code Editor & Run/Next Button */}
+        <div className="w-1/2 flex flex-col p-6 bg-transparent">
           <textarea
-            className="w-full h-40 p-2 border rounded-md"
+            className="flex-1 w-full p-2 border rounded-md bg-[#CAE9F5] outline outline-[#73B9EE]"
             placeholder="Write your Python code here..."
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          <div className="w-full h-40 p-2 border rounded-md bg-gray-100">
-            <pre>{output || "Output will be shown here..."}</pre>
+          <div className="flex justify-center mt-4">
+            <button
+              className={`px-6 py-3 rounded-lg text-lg ${
+                isPrint
+                  ? "bg-[#73B9EE] text-black outline outline-[#73B9EE] hover:bg-[#CAE9F5]"
+                  : "bg-[#28BEBE] text-black outline outline-[#003366] hover:bg-[#CCE5E5]"
+              }`}
+              onClick={isPrint ? handleNextClick : handleRunCode}
+            >
+              {isPrint ? "Next" : "Run"}
+            </button>
           </div>
-        </div>
-        
-        <div className="flex justify-between mt-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => window.history.back()}
-          >
-            Previous
-          </button>
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded-lg"
-            onClick={handleRunCode}
-          >
-            Run
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg ${isCodeExecuted ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-            disabled={!isCodeExecuted}
-            onClick={handleNext}
-          >
-            Next
-          </button>
         </div>
       </div>
       <Footer />
+      <audio
+        ref={audioRef}
+        src={audioFile}
+        onEnded={handleAudioEnd}
+        preload="auto"
+      />
     </div>
   );
 };
 
-export default Code;
+export default LearnPage;

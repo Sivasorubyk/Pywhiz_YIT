@@ -76,9 +76,25 @@ export const fetchUser = async () => {
 
 // Run code
 export const runCode = async (code) => {
+  const token = localStorage.getItem("token"); // Get the token from local storage
+
+  if (!token) {
+    throw new Error("No authentication token found.");
+  }
+
   try {
-    const response = await api.post("/practice/run-code/", { code });
-    return response.data; // Return the output from the API
+    const response = await api.post(
+      "/practice/run-code/",
+      { code },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the JWT in the header for authorization
+        },
+      }
+    );
+
+    // Return the direct response data (output as a string)
+    return response.data; // Expected output from the backend
   } catch (error) {
     handleError(error, "running code");
   }
@@ -87,10 +103,18 @@ export const runCode = async (code) => {
 // Generic error handling function
 const handleError = (error, action) => {
   if (error.response) {
+    console.error("API Error: ", error.response); // Log full error response
     throw new Error(
-      error.response.data.message || `An error occurred during ${action}`
+      error.response.data.message ||
+        `An error occurred during ${action}: ${
+          error.response.data.error || "Unknown error"
+        }`
     );
-  } else {
+  } else if (error.request) {
+    console.error("No response received: ", error.request); // Log the request if no response is received
     throw new Error(`Network error during ${action}`);
+  } else {
+    console.error("Error setting up request: ", error.message); // Log error setup issues
+    throw new Error(`Unexpected error during ${action}`);
   }
 };

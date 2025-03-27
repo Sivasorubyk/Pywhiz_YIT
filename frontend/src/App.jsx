@@ -6,9 +6,9 @@ import Code from "./pages/Code";
 import Exercise from "./pages/Exercise";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Contact from "./pages/Contact"
-import ResetPass from "./pages/ResetPass"
-import PrivateRoute from "./components/PrivateRoute"
+import Contact from "./pages/Contact";
+import ResetPass from "./pages/ResetPass";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ResetPass />} />
-          
+
           {/* Protected routes - require login */}
           <Route
             path="/learn"

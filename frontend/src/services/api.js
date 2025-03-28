@@ -59,6 +59,15 @@ export const verifyOTP = async (data) => {
   }
 };
 
+export const sendMessage = async (messageData) => {
+  try {
+    const response = await api.post("/contact/send-message/", messageData); // Adjust the endpoint as necessary
+    return response.data; // Return the response data
+  } catch (error) {
+    handleError(error, "sending message");
+  }
+};
+
 // Fetch user data
 export const fetchUser = async () => {
   const token = localStorage.getItem("token"); // Get the token from local storage

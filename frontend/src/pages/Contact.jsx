@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { sendMessage } from "../services/api";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const Contact = () => {
     message: "",
   });
   const [faqOpen, setFaqOpen] = useState(null);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const faqs = [
     {
@@ -35,10 +37,15 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    try {
+      const response = await sendMessage(formData);
+      setFeedbackMessage("Message sent successfully!");
+      setFormData({ fullName: "", email: "", message: "" });
+    } catch (error) {
+      setFeedbackMessage("Failed to send message. Please try again.");
+    }
   };
 
   return (
@@ -68,8 +75,8 @@ const Contact = () => {
           </div>
 
           {/* Right Section: Contact Form Styled Like the PyWhiz Section */}
-          <div className="w-1/2 pl-4">
-            <div className="text-center bg-[#CCE5E5] outline outline-[#008080] p-8 rounded-lg shadow-md h-[60vh] flex flex-col justify-center">
+          <div className="w-1/2 pl-2">
+            <div className="text-center bg-[#CCE5E5] outline outline-[#008080] p-8 rounded-lg shadow-md h-[80vh] flex flex-col justify-center">
               <h1 className="text-3xl font-bold mb-6">Get In Touch</h1>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="mb-4">
@@ -118,6 +125,11 @@ const Contact = () => {
                   Send Message
                 </button>
               </form>
+              {feedbackMessage && (
+                <p className={`mt-4 ${feedbackMessage.includes("successfully") ? "text-green-600" : "text-red-600"} font-bold`}>
+                  {feedbackMessage}
+                </p>
+              )}
             </div>
           </div>
         </div>

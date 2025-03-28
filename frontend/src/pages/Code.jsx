@@ -108,6 +108,13 @@ const LearnPage = () => {
     navigate("/exercise");
   };
 
+  useEffect(() => {
+    const watched = localStorage.getItem("videoWatched") === "true";
+    if (!watched) {
+      navigate("/learn"); // Redirect to Learn page if not completed
+    }
+  }, [navigate]);
+
   return (
     <div className="h-screen flex flex-col">
       <Navbar />

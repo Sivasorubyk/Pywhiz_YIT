@@ -57,7 +57,9 @@ const LearnPage = () => {
   };
 
   const handleNext = () => {
-    navigate("/code");
+    if (videoWatched) {
+      navigate("/code");
+    }
   };
 
   return (

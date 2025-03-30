@@ -167,7 +167,7 @@ const LearnPage = () => {
         {/* Right Half: Code Editor & Run/Next Button */}
         <div className="w-1/2 flex flex-col p-6 bg-transparent">
           <textarea
-            className="flex-1 w-full p-2 border rounded-md bg-[#CAE9F5] outline outline-[#73B9EE]"
+            className="flex-1 w-full p-2 border rounded-md bg-[#CAE9F5] outline outline-[#73B9EE] text-2xl"
             placeholder="Write your Python code here..."
             value={code}
             onChange={(e) => setCode(e.target.value)}

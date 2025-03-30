@@ -141,7 +141,7 @@ const Exercise = () => {
 
         <div className="flex justify-between mt-5">
           <button
-            onClick={() => navigate("/learncode")}
+            onClick={() => navigate("/code")}
             className="bg-teal-500 text-white px-5 py-2 rounded"
           >
             Previous

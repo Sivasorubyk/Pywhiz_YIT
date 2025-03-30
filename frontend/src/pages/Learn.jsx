@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import demoVideo from "../assets/videos/demo.mp4";
+import learnThumb from "../assets/learnThumb.png";
 import speakingGif from "../assets/speaking.gif";
 import audioFile from "../assets/audio.mp3";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
@@ -71,6 +72,7 @@ const LearnPage = () => {
           <video
             ref={videoRef}
             className="w-full h-full outline outline-[#008080] rounded-lg"
+            poster={learnThumb}
             controls
             onPlay={handleVideoPlay}
             onEnded={handleVideoEnd}

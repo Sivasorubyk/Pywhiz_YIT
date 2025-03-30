@@ -6,6 +6,7 @@ import demoVideo from "../assets/videos/demo.mp4";
 import introThumb from "../assets/introThumb.png";
 import demoThumb from "../assets/demoThumb.png";
 import { Link } from "react-router-dom";
+import { GreenButton } from "../components/Buttons"; // Import GreenButton
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -58,9 +59,7 @@ const Home = () => {
               learning Python.
             </p>
             <Link to="/learn">
-              <button className="mt-8 px-6 py-3 bg-[#28BEBE] text-black outline outline-[#003366] rounded-lg text-lg hover:bg-[#CCE5E5]">
-                Get Started
-              </button>
+              <GreenButton text="Get Started" className="mt-8" />
             </Link>
           </div>
 

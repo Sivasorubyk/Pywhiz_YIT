@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { sendMessage } from "../services/api";
+import { GreenButton } from "../components/Buttons";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -118,15 +119,20 @@ const Contact = () => {
                   ></textarea>
                 </div>
 
-                <button
+                <GreenButton
                   type="submit"
-                  className="mt-8 px-6 py-3 bg-[#28BEBE] text-black outline outline-[#003366] rounded-lg text-lg hover:bg-[#CCE5E5]"
-                >
-                  Send Message
-                </button>
+                  text="Send Message"
+                  className="mt-8"
+                />
               </form>
               {feedbackMessage && (
-                <p className={`mt-4 ${feedbackMessage.includes("successfully") ? "text-green-600" : "text-red-600"} font-bold`}>
+                <p
+                  className={`mt-4 ${
+                    feedbackMessage.includes("successfully")
+                      ? "text-green-600"
+                      : "text-red-600"
+                  } font-bold`}
+                >
                   {feedbackMessage}
                 </p>
               )}

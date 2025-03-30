@@ -6,6 +6,7 @@ import speakingGif from "../assets/speaking.gif";
 import audioFile from "../assets/audio.mp3";
 import { FaVolumeMute, FaVolumeUp, FaPlay } from "react-icons/fa";
 import { runCode } from "../services/api";
+import { GreenButton, BlueButton } from "../components/Buttons";
 
 const LearnPage = () => {
   const [audioPlaying, setAudioPlaying] = useState(false);
@@ -173,22 +174,13 @@ const LearnPage = () => {
             onChange={(e) => setCode(e.target.value)}
           />
           <div className="flex justify-between mt-4">
-            <button
-              onClick={() => navigate("/learn")}
-              className="p-4 rounded-lg text-lg bg-[#28BEBE] text-black outline outline-[#003366] hover:bg-[#CCE5E5]"
-            >
-              Previous
-            </button>
-            <button
-              className={`px-6 py-3 rounded-lg text-lg ${
-                isPrint
-                  ? "bg-[#73B9EE] text-black outline outline-[#003366] hover:bg-[#CAE9F5]"
-                  : "bg-[#28BEBE] text-black outline outline-[#003366] hover:bg-[#CCE5E5]"
-              }`}
-              onClick={isPrint ? handleNextClick : handleRunCode}
-            >
-              {isPrint ? "Next" : "Run"}
-            </button>
+            <GreenButton text="Previous" onClick={() => navigate("/learn")} />
+
+            {isPrint ? (
+              <BlueButton text="Next" onClick={handleNextClick} />
+            ) : (
+              <GreenButton text="Run" onClick={handleRunCode} />
+            )}
           </div>
         </div>
       </div>

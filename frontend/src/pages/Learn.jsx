@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import demoVideo from "../assets/videos/demo.mp4";
+import learnThumb from "../assets/learnThumb.png";
 import speakingGif from "../assets/speaking.gif";
 import audioFile from "../assets/audio.mp3";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { BlueButton } from "../components/Buttons";
 
 const LearnPage = () => {
   const [videoWatched, setVideoWatched] = useState(false);
@@ -66,11 +68,11 @@ const LearnPage = () => {
     <div className="h-screen flex flex-col">
       <Navbar />
       <div className="flex flex-1">
-        {/* Video Section (Left Half) */}
         <div className="w-1/2 flex justify-center items-center bg-transparent pt-6 pl-6">
           <video
             ref={videoRef}
             className="w-full h-full outline outline-[#008080] rounded-lg"
+            poster={learnThumb}
             controls
             onPlay={handleVideoPlay}
             onEnded={handleVideoEnd}
@@ -80,9 +82,7 @@ const LearnPage = () => {
           </video>
         </div>
 
-        {/* Right Half */}
         <div className="w-1/2 flex flex-col p-6 bg-transparent">
-          {/* Intro Section (Top Half) */}
           <div className="flex-1 p-6 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
             <h2 className="text-xl font-semibold">Intro</h2>
             <p className="text-lg mt-2">
@@ -94,7 +94,6 @@ const LearnPage = () => {
             </p>
           </div>
 
-          {/* GIF, Transcript & Controls (Bottom Half) */}
           <div className="flex-1 flex items-center justify-between mt-4 p-6 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md">
             <img
               src={speakingGif}
@@ -105,25 +104,19 @@ const LearnPage = () => {
               An exercise will follow after you press the next button to test
               your knowledge.
             </p>
-            <button
-              onClick={toggleMute}
-              className="text-2xl p-3 bg-white rounded-full shadow-md"
-            >
-              {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-            </button>
-            {videoWatched && (
+            <div className="flex items-center">
               <button
-                className="ml-4 px-6 py-3 bg-[#28BEBE] text-black outline outline-[#003366] rounded-lg text-lg hover:bg-[#CCE5E5]"
-                onClick={handleNext}
+                onClick={toggleMute}
+                className="text-2xl p-3 bg-white rounded-full shadow-md mr-6 mt-6"
               >
-                Next
+                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
               </button>
-            )}
+              {videoWatched && <BlueButton text="Next" onClick={handleNext} />}
+            </div>
           </div>
         </div>
       </div>
       <Footer />
-      {/* Hidden Audio Player */}
       <audio ref={audioRef} src={audioFile} />
     </div>
   );

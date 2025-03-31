@@ -2,66 +2,86 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import speakingGif from "../assets/speaking.gif"; // Replace with actual GIF
-import audioFile from "../assets/audio.mp3"; // Ensure this path is correct
+import speakingGif from "../assets/speaking.gif";
+import audioFile from "../assets/audio.mp3";
 import confetti from "canvas-confetti";
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { FaVolumeMute, FaVolumeUp, FaPlay } from "react-icons/fa";
+import { GreenButton, BlueButton } from "../components/Buttons";
 
 const Exercise = () => {
   const navigate = useNavigate();
   const correctAnswers = ["correct", "wrong", "correct"];
   const [userAnswers, setUserAnswers] = useState(["", "", ""]);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [nextEnabled, setNextEnabled] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
-
-  // Audio States
-  const [audioPlaying, setAudioPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [audioReady, setAudioReady] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(true);
   const audioRef = useRef(null);
+  const timerRef = useRef(null);
 
   useEffect(() => {
-    const playAudio = () => {
+    timerRef.current = setTimeout(() => {
+      setShowPlayButton(false);
       if (audioRef.current) {
         audioRef.current.play();
-        setAudioPlaying(true);
         setAudioReady(true);
+        setIsMuted(false);
+
+        audioRef.current.addEventListener("ended", () => {
+          setIsMuted(true);
+        });
+      }
+    }, 2000);
+
+    return () => {
+      clearTimeout(timerRef.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.removeEventListener("ended", () => {});
       }
     };
-
-    const delayPlay = setTimeout(playAudio, 2000);
-
-    return () => clearTimeout(delayPlay);
   }, []);
 
   const toggleMute = () => {
     if (audioRef.current) {
       if (isMuted) {
+        audioRef.current.currentTime = 0;
         audioRef.current.play();
-        setAudioPlaying(true);
       } else {
         audioRef.current.pause();
-        setAudioPlaying(false);
       }
       setIsMuted(!isMuted);
     }
   };
 
-  const handleAudioEnd = () => {
-    setAudioPlaying(false);
+  const handlePlayButtonClick = () => {
+    clearTimeout(timerRef.current);
+    setShowPlayButton(false);
+    if (audioRef.current) {
+      audioRef.current.play();
+      setAudioReady(true);
+      setIsMuted(false);
+
+      audioRef.current.addEventListener("ended", () => {
+        setIsMuted(true);
+      });
+    }
   };
 
   const handleAnswerChange = (index, value) => {
-    let newAnswers = [...userAnswers];
-    newAnswers[index] = value;
-    setUserAnswers(newAnswers);
+    setUserAnswers((prevAnswers) => {
+      const newAnswers = [...prevAnswers];
+      newAnswers[index] = value;
+      return newAnswers;
+    });
   };
 
   const checkAnswers = () => {
-    if (JSON.stringify(userAnswers) === JSON.stringify(correctAnswers)) {
-      setIsCompleted(true);
-      setNextEnabled(true);
+    const isCorrect =
+      JSON.stringify(userAnswers) === JSON.stringify(correctAnswers);
+    setIsCompleted(isCorrect);
+    if (isCorrect) {
       confetti();
       setFeedbackMessage("All answers are correct! 🎉");
     } else {
@@ -77,42 +97,54 @@ const Exercise = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-blue-100 to-blue-200">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="container mx-auto text-center py-10">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold text-gray-800">
           It's time to test your understanding, We are in Milestone 1!
         </h1>
-        <div className="bg-white p-5 mt-5 rounded-lg shadow-lg flex">
-          <p className="flex-1 text-left">
-            {/* Instruction text here */}
-            Exercise instructions go here...
+        <div className="p-5 mt-5 bg-[#CCE5E5] outline outline-[#008080] rounded-lg shadow-md flex items-center justify-between">
+          <p className="text-left text-black text-lg w-3/4">
+            This exercise is designed to test your understanding of the concepts
+            covered in Milestone 1. You will be presented with an audio clip and
+            a series of questions related to it. Please listen carefully and
+            select the most accurate answer for each question. Good luck, and
+            may this exercise solidify your grasp of the material!
           </p>
+          <div className="flex flex-col items-center">
+            {showPlayButton ? (
+              <button
+                onClick={handlePlayButtonClick}
+                className="text-3xl p-3 bg-white rounded-full shadow-md"
+              >
+                <FaPlay />
+              </button>
+            ) : audioReady ? (
+              <button
+                onClick={toggleMute}
+                className="text-2xl p-3 bg-white rounded-full shadow-md"
+              >
+                {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+              </button>
+            ) : null}
+          </div>
           <img
             src={speakingGif}
             alt="Speaking Animation"
-            className="w-40 h-40"
+            className="w-24 h-24"
           />
-          {audioReady && (
-            <button
-              onClick={toggleMute}
-              className="text-2xl p-3 bg-white rounded-full shadow-md ml-4"
-            >
-              {isMuted ? <FaVolumeUp /> : <FaVolumeMute />}
-            </button>
-          )}
         </div>
 
-        <div className="mt-5 bg-white p-5 rounded-lg shadow-lg">
-          {[0, 1, 2].map((index) => (
+        <div className="mt-5 bg-[#CCE5E5] outline outline-[#008080] p-8 rounded-lg shadow-md">
+          {userAnswers.map((answer, index) => (
             <div
               key={index}
-              className="flex justify-between items-center p-2 border rounded mt-2"
+              className="flex justify-between items-center p-2 border-2 border-[#003366] rounded mt-2"
             >
-              <p>Question {index + 1} goes here...</p>
+              <p className="text-black">Question {index + 1} goes here...</p>
               <select
-                className="border p-1"
-                value={userAnswers[index]}
+                className="border p-1 text-black"
+                value={answer}
                 onChange={(e) => handleAnswerChange(index, e.target.value)}
               >
                 <option value="">Select</option>
@@ -123,44 +155,39 @@ const Exercise = () => {
           ))}
         </div>
 
-        <button
-          onClick={checkAnswers}
-          className="bg-blue-500 text-white px-5 py-2 rounded mt-5"
-        >
-          Check
-        </button>
-
-        {feedbackMessage && (
-          <p className="text-red-600 font-bold mt-3">{feedbackMessage}</p>
-        )}
-        {isCompleted && (
-          <p className="text-green-600 font-bold mt-3">
-            Milestone 1 Completed! 🎉 Congratulations!
-          </p>
-        )}
-
-        <div className="flex justify-between mt-5">
-          <button
-            onClick={() => navigate("/learncode")}
-            className="bg-teal-500 text-white px-5 py-2 rounded"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => navigate("/nextpage")}
-            className={`px-5 py-2 rounded ${
-              nextEnabled
-                ? "bg-green-500 text-white"
-                : "bg-gray-400 text-gray-600"
-            }`}
-            disabled={!nextEnabled}
-          >
-            Next
-          </button>
+        <div className="flex justify-between mt-4">
+          <GreenButton
+            className="mr-auto"
+            text="Previous"
+            onClick={() => navigate("/code")}
+          />
+          <div className="flex-grow">
+            {isCompleted && (
+              <p className="font-bold mt-10 text-gray-700 text-center">
+                Milestone 1 Completed! 🎉 Congratulations!
+                {feedbackMessage && <br />}
+                {feedbackMessage}
+              </p>
+            )}
+            {!isCompleted && feedbackMessage && (
+              <p
+                className={`font-bold mt-1 text-center ${
+                  isCompleted ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {feedbackMessage}
+              </p>
+            )}
+          </div>
+          {isCompleted ? (
+            <BlueButton text="Next" onClick={() => navigate("/nextpage")} />
+          ) : (
+            <GreenButton text="Check" onClick={checkAnswers} />
+          )}
         </div>
       </div>
       <Footer />
-      <audio ref={audioRef} src={audioFile} onEnded={handleAudioEnd} />
+      <audio ref={audioRef} src={audioFile} />
     </div>
   );
 };

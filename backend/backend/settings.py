@@ -82,7 +82,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pywhiz_yit',
         'USER': 'root',
-        'PASSWORD': 'root0'
+        'PASSWORD': 'root0',
+        'HOST': 'localhost',  # Or your database host
+        'PORT': '3306',  # Default MySQL port
     }
 }
 

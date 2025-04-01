@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PracticeCodeConfig(AppConfig):
+class CodeExecutionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'practice_code'
+    name = 'code_execution'

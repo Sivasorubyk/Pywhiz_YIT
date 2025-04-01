@@ -92,9 +92,13 @@ export const runCode = async (code) => {
   }
 
   try {
+    // Fetch the user data to get the userId
+    const userData = await fetchUser();
+    const userId = userData.id; // Use the 'id' field from the user data
+
     const response = await api.post(
-      "/practice/run-code/",
-      { code },
+      "/code_execution/run-code/",
+      { code, user_id: userId },
       {
         headers: {
           Authorization: `Bearer ${token}`, // Include the JWT in the header for authorization

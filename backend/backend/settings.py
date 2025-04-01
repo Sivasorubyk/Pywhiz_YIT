@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users',
-    'practice_code',
+    'code_execution',
     'contact'
 ]
 
